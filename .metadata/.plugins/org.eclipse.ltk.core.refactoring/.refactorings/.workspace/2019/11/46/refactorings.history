@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;DefaultReaderWriter&apos;" deleteContents="true" description="Delete resource &apos;DefaultReaderWriter&apos;" element1="/DefaultReaderWriter" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1573457995233"/>
+</session>
