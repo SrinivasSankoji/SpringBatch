@@ -18,7 +18,7 @@ public class EmployeeJsonReader implements ItemReader<EmployeeDTO>
 	private int nextEmployeeIndex;
     private List<EmployeeDTO> employeeData;
     
-   EmployeeJsonReader() {
+    EmployeeJsonReader() {
         initialize();
     }
 

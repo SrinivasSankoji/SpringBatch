@@ -1,4 +1,4 @@
-package com.example.demo.batch.writer;
+package com.jio.ngo.threat.writer;
 
 import java.util.List;
 
@@ -8,13 +8,13 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.batch.model.Employee;
-import com.example.demo.batch.repository.EmployeeRepository;
+import com.jio.ngo.threat.model.Employee;
+import com.jio.ngo.threat.repository.EmployeeRepository;
 
 @Component
-public class EmployeeDBWriter implements ItemWriter<Employee>
+public class EmployeeWriter implements ItemWriter<Employee>
 {
-	private static final Logger logger = LoggerFactory.getLogger(EmployeeDBWriter.class);
+private static final Logger logger = LoggerFactory.getLogger(EmployeeWriter.class);
 	
 	@Autowired
 	EmployeeRepository employeeRepository;
@@ -26,4 +26,5 @@ public class EmployeeDBWriter implements ItemWriter<Employee>
 	    logger.info("{} employees saved in database", EmployeeList.size());
 		
 	}
+
 }
