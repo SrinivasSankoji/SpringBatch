@@ -8,7 +8,6 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -18,21 +17,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import com.example.demo.batch.dto.EmployeeDTO;
-import com.example.demo.batch.listener.ProcessListener;
-import com.example.demo.batch.listener.ReaderListener;
-import com.example.demo.batch.listener.WriterListener;
 import com.example.demo.batch.mapper.EmployeeRowMapper;
 import com.example.demo.batch.model.Employee;
 import com.example.demo.batch.processor.EmployeeProcessor;
 
-@Configuration
+@Component
 @EnableBatchProcessing
-public class ItemReaderJob 
+public class ItemProcessorJob 
 {
 	@Autowired
 	DataSource dataSource;
@@ -46,37 +42,22 @@ public class ItemReaderJob
 	@Autowired
 	EmployeeProcessor employeeProcessor;
 	
-	@Autowired
-	ExecutionContext executionContext;
-	
-	@Autowired
-	ReaderListener readerListener;
-	
-	@Autowired
-	ProcessListener processListener;
-	
-	@Autowired
-	WriterListener writerListener;
-	
-    @Qualifier(value = "itemReaderJob")
+    @Qualifier(value = "itemProcessorJob")
     @Bean
-    public Job defaultReaderWriterJob() throws Exception 
+    public Job processorItemJob() throws Exception 
     {
-        return jobBuilderFactory.get("itemReaderJob")
-	            .start(step1ItemReaderJob())
+        return jobBuilderFactory.get("defaultReaderWriterJob")
+	            .start(stepItemProcessorJob())
 	            .build();
     }
 
     @Bean
-    public Step step1ItemReaderJob() throws Exception {
+    public Step stepItemProcessorJob() throws Exception {
         return this.stepBuilderFactory.get("step1")
-                .<EmployeeDTO, Employee>chunk(1)
+                .<EmployeeDTO, Employee>chunk(5)
                 .reader(employeeReader())
                 .processor(employeeProcessor)
                 .writer(employeeDBWriterDefault())
-                .listener(readerListener)
-                .listener(processListener)
-                .listener(writerListener)
                 .build();
     }
 
@@ -108,12 +89,6 @@ public class ItemReaderJob
         itemWriter.setSql("insert into employee (EMPLOYEE_ID, FIRSTNAME, LASTNAME, EMAIL, AGE) values (:employeeId, :firstName, :lastName, :email, :age)");
         itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Employee>());
         return itemWriter;
-    }
-    
-    @Bean
-    public ExecutionContext ExecutionContext()
-    {
-    	return new ExecutionContext();
     }
 
 }

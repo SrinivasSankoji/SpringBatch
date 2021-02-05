@@ -26,9 +26,6 @@ public class RiskManagementJob
 {
 	
 	@Autowired
-	DataSource dataSource;
-	
-	@Autowired
 	JobBuilderFactory jobBuilderFactory;
 	
 	@Autowired	

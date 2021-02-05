@@ -18,13 +18,15 @@ public class ReaderListener implements ItemReadListener<EmployeeDTO>
 	@Override
 	public void beforeRead() 
 	{
-		 System.out.println("Before Read Operation.");
 	}
 
 	@Override
 	public void afterRead(EmployeeDTO employeeDTO) 
 	{
-		 System.out.println("After Reading :" + employeeDTO.toString());
+		if(employeeDTO.getEmployeeId().equalsIgnoreCase("E101"))
+		{
+			employeeDTO=null;
+		}
 	}
 
 	@Override
